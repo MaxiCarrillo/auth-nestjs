@@ -1,0 +1,46 @@
+import { DocumentBuilder, SwaggerCustomOptions } from "@nestjs/swagger";
+import { SwaggerTheme, SwaggerThemeNameEnum } from "swagger-themes";
+
+export const getSwaggerConfig = () => {
+    const swaggerConfig = new DocumentBuilder()
+        .setTitle('API Auth')
+        .setDescription('Documentacion de API para Sistema de Autenticacion')
+        .setVersion('1.0')
+        .build();
+
+    const theme = new SwaggerTheme();
+    const swaggerSetupOptions = {
+        customSiteTitle: 'API Auth',
+        customCss: theme.getBuffer(SwaggerThemeNameEnum.DARK),
+        explorer: true,
+        swaggerOptions: {
+            operationsSorter: function (a: any, b: any) {
+                const order = {
+                    get: '0',
+                    post: '1',
+                    patch: '2',
+                    put: '3',
+                    delete: '4',
+                    head: '5',
+                    options: '6',
+                    connect: '7',
+                    trace: '8',
+                };
+                return (
+                    order[a.get('method')].localeCompare(order[b.get('method')]) || a.get('path').localeCompare(b.get('path'))
+                );
+            },
+            tagsSorter: (tag1: string, tag2: string) => {
+                const order = [
+                    'Auth',
+                ];
+                return order.indexOf(tag1) - order.indexOf(tag2);
+            },
+        },
+    } as SwaggerCustomOptions;
+
+    return {
+        swaggerConfig,
+        swaggerSetupOptions,
+    };
+};
