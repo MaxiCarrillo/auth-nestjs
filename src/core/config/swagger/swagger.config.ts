@@ -30,12 +30,6 @@ export const getSwaggerConfig = () => {
                     order[a.get('method')].localeCompare(order[b.get('method')]) || a.get('path').localeCompare(b.get('path'))
                 );
             },
-            tagsSorter: (tag1: string, tag2: string) => {
-                const order = [
-                    'Auth',
-                ];
-                return order.indexOf(tag1) - order.indexOf(tag2);
-            },
         },
     } as SwaggerCustomOptions;
 
