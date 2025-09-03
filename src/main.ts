@@ -4,7 +4,7 @@ import { SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { AppModule } from './app.module';
-import { getSwaggerConfig, NODE_ENV, PORT } from './core/config';
+import { getSwaggerConfig, GOOGLE_SECRET, NODE_ENV, PORT } from './core/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,7 +22,7 @@ async function bootstrap() {
   // SESSION PARA AUTENTICACIÓN CON GOOGLE
   app.use(
     session({
-      secret: 'tu_secreto_super_seguro', // ¡pon un secreto fuerte en prod!
+      secret: GOOGLE_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
