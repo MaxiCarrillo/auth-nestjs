@@ -5,9 +5,8 @@ import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
 import { JWT_ACCESS_SECRET } from 'src/core/config';
 import { GoogleProfile } from 'src/modules/auth/interfaces';
-import { JwtPayload } from 'src/modules/auth/types';
-import { CreateUserDto } from '../dtos';
-import { UserResponseDTO } from '../dtos/user-response.dto';
+import { JwtPayload } from 'src/modules/auth/interfaces';
+import { CreateUserDto, UserResponseDTO } from '../dtos';
 import { User } from '../schemas';
 
 @Injectable()

@@ -4,7 +4,7 @@ import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } from "src/core/config";
 import { ACCESS_TOKEN_COOKIE, errors, REFRESH_TOKEN_COOKIE } from "src/modules/common/constants";
-import { JwtPayload } from "../types";
+import { JwtPayload } from "../interfaces";
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {

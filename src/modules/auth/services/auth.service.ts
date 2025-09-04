@@ -5,7 +5,7 @@ import { errors } from 'src/modules/common/constants';
 import { LoginDto } from '../dtos';
 import { UserService } from 'src/modules/user/services';
 import { User } from 'src/modules/user/schemas';
-import { JwtPayload } from '../types';
+import { JwtPayload } from '../interfaces';
 
 @Injectable()
 export class AuthService {
