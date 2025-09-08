@@ -1,9 +1,9 @@
+import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } from "@/core/config";
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/modules/common/constants";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } from "src/core/config";
-import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "src/modules/common/constants";
 import { JwtPayload } from "../interfaces";
 
 @Injectable()

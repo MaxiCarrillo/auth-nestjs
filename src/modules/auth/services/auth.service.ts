@@ -1,9 +1,9 @@
+import { JWT_ACCESS_EXPIRY, JWT_ACCESS_SECRET, JWT_REFRESH_EXPIRY, JWT_REFRESH_SECRET } from '@/core/config';
+import { User } from '@/modules/user/schemas';
+import { UserService } from '@/modules/user/services';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JWT_ACCESS_EXPIRY, JWT_ACCESS_SECRET, JWT_REFRESH_EXPIRY, JWT_REFRESH_SECRET } from 'src/core/config';
 import { LoginDto } from '../dtos';
-import { UserService } from 'src/modules/user/services';
-import { User } from 'src/modules/user/schemas';
 import { JwtPayload } from '../interfaces';
 
 @Injectable()

@@ -1,10 +1,10 @@
+import { JWT_ACCESS_SECRET } from '@/core/config';
+import { GoogleProfile, JwtPayload } from '@/modules/auth/interfaces';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
-import { JWT_ACCESS_SECRET } from 'src/core/config';
-import { GoogleProfile, JwtPayload } from 'src/modules/auth/interfaces';
 import { CreateUserDto, UserResponseDTO } from '../dtos';
 import { User } from '../schemas';
 

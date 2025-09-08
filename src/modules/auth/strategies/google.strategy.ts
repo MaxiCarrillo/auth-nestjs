@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-google-oidc";
-import { GOOGLE_CALLBACK_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "src/core/config";
-import { UserService } from "src/modules/user/services";
+import { GOOGLE_CALLBACK_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "@/core/config";
+import { UserService } from "@/modules/user/services";
 import { GoogleProfile } from "../interfaces";
 
 @Injectable()

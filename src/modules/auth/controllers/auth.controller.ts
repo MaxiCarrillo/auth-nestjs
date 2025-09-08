@@ -1,12 +1,12 @@
+import { JWT_ACCESS_EXPIRY, JWT_REFRESH_EXPIRY } from '@/core/config';
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/modules/common/constants';
+import { Cookies } from '@/modules/common/decorators';
+import { CreateUserDto, UserResponseDTO } from '@/modules/user/dtos';
+import { UserService } from '@/modules/user/services';
+import { setCookie } from '@/shared/utils';
 import { Body, ClassSerializerInterceptor, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
-import { JWT_ACCESS_EXPIRY, JWT_REFRESH_EXPIRY } from 'src/core/config';
-import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from 'src/modules/common/constants';
-import { Cookies } from 'src/modules/common/decorators';
-import { CreateUserDto, UserResponseDTO } from 'src/modules/user/dtos';
-import { UserService } from 'src/modules/user/services';
-import { setCookie } from 'src/shared/utils';
 import { LoginDto } from '../dtos';
 import { GoogleOAuthGuard, JwtAccessAuthGuard, JwtRefreshAuthGuard, LocalAuthGuard } from '../guards';
 import { AuthService } from '../services';

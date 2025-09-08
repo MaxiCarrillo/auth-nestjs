@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JWT_ACCESS_EXPIRY, JWT_ACCESS_SECRET } from 'src/core/config';
+import { JWT_ACCESS_EXPIRY, JWT_ACCESS_SECRET } from '@/core/config';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './controllers';
 import { AuthService } from './services';

@@ -1,10 +1,10 @@
+import { commonSchema } from '@/core/environment';
 import 'dotenv/config';
-import { commonSchema } from 'src/core/environment';
 import { z } from "zod";
 
 const envSchema = z.object({
     ...commonSchema.shape,
-    
+
     DATABASE_HOST: z.string().min(2).max(100).default("localhost"),
     DATABASE_PORT: z.string().transform(Number).pipe(z.number().min(0)).default(27017),
     DATABASE_NAME: z.string().min(2).max(100).default("auth_example"),

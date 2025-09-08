@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
-import { JwtAccessAuthGuard } from 'src/modules/auth/guards';
+import { JwtAccessAuthGuard } from '@/modules/auth/guards';
 import { UpdateUserDto } from '../dtos';
 
 @Controller('user')
