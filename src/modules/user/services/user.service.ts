@@ -4,8 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
 import { JWT_ACCESS_SECRET } from 'src/core/config';
-import { GoogleProfile } from 'src/modules/auth/interfaces';
-import { JwtPayload } from 'src/modules/auth/interfaces';
+import { GoogleProfile, JwtPayload } from 'src/modules/auth/interfaces';
 import { CreateUserDto, UserResponseDTO } from '../dtos';
 import { User } from '../schemas';
 
@@ -20,12 +19,8 @@ export class UserService {
         return this.userModel.find().lean();
     }
 
-    async findByEmail(email: string): Promise<UserResponseDTO | null> {
-        const user = await this.userModel.findOne({ email }).lean();
-        if (!user) return null;
-        return plainToInstance(UserResponseDTO, user, {
-            excludeExtraneousValues: true,
-        });
+    async findByEmail(email: string): Promise<User | null> {
+        return await this.userModel.findOne({ email }).lean();
     }
 
     async findUserByToken(accessToken: string): Promise<UserResponseDTO | null> {

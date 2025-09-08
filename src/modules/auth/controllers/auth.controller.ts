@@ -2,18 +2,18 @@ import { Body, ClassSerializerInterceptor, Controller, Get, Post, Req, Res, Unau
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { JWT_ACCESS_EXPIRY, JWT_REFRESH_EXPIRY } from 'src/core/config';
-import { ACCESS_TOKEN_COOKIE, errors, REFRESH_TOKEN_COOKIE } from 'src/modules/common/constants';
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from 'src/modules/common/constants';
 import { Cookies } from 'src/modules/common/decorators';
+import { CreateUserDto, UserResponseDTO } from 'src/modules/user/dtos';
+import { UserService } from 'src/modules/user/services';
 import { setCookie } from 'src/shared/utils';
 import { LoginDto } from '../dtos';
 import { GoogleOAuthGuard, JwtAccessAuthGuard, JwtRefreshAuthGuard, LocalAuthGuard } from '../guards';
-import { GoogleProfile } from '../interfaces';
 import { AuthService } from '../services';
-import { CreateUserDto } from 'src/modules/user/dtos';
-import { UserService } from 'src/modules/user/services';
 
-@Controller('auth')
 @ApiTags('Auth')
+@Controller('auth')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
 
     constructor(
@@ -23,19 +23,14 @@ export class AuthController {
 
     @Get('me')
     @UseGuards(JwtAccessAuthGuard)
-    @ApiOperation({
-        summary: 'Obtener información del usuario autenticado',
-        description: 'Devuelve la información del usuario autenticado'
-    })
-    @UseInterceptors(ClassSerializerInterceptor)
+    @ApiOperation({ summary: 'Obtener información del usuario autenticado', description: 'Devuelve la información del usuario autenticado' })
+    @ApiResponse({ status: 200, type: UserResponseDTO })
     async getAuthUser(
         @Cookies(ACCESS_TOKEN_COOKIE) accessToken: string,
-    ) {
+    ): Promise<UserResponseDTO> {
         const user = await this.userService.findUserByToken(accessToken);
-        if (!user) {
-            throw new UnauthorizedException(errors.UNAUTHORIZED_REQUEST);
-        }
-        return user;
+        if (!user) throw new UnauthorizedException("Invalid token");
+        return new UserResponseDTO(user);
     }
 
     @Post('login')
@@ -137,7 +132,7 @@ export class AuthController {
     ) {
         const user = request.user;
         if (!user) {
-            throw new UnauthorizedException(errors.UNAUTHORIZED_REQUEST);
+            throw new UnauthorizedException();
         }
         const { access_token, refresh_token } = this.authService.googleLogin(user);
         setCookie(response, ACCESS_TOKEN_COOKIE, access_token, {

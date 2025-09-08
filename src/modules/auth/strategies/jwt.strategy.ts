@@ -3,7 +3,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } from "src/core/config";
-import { ACCESS_TOKEN_COOKIE, errors, REFRESH_TOKEN_COOKIE } from "src/modules/common/constants";
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "src/modules/common/constants";
 import { JwtPayload } from "../interfaces";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') 
             ignoreExpiration: false,
             jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
                 const token = request.cookies[ACCESS_TOKEN_COOKIE];
-                if (!token) throw new UnauthorizedException(errors.UNAUTHORIZED_REQUEST); 
+                if (!token) throw new UnauthorizedException("No access token");
                 return token;
             }])
         })
@@ -35,7 +35,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
             ignoreExpiration: false,
             jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
                 const token = request.cookies[REFRESH_TOKEN_COOKIE];
-                if (!token) throw new UnauthorizedException(errors.UNAUTHORIZED_REQUEST);
+                if (!token) throw new UnauthorizedException("No refresh token");
                 return token;
             }])
         })

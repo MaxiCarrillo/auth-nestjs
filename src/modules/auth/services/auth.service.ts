@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JWT_ACCESS_EXPIRY, JWT_ACCESS_SECRET, JWT_REFRESH_EXPIRY, JWT_REFRESH_SECRET } from 'src/core/config';
-import { errors } from 'src/modules/common/constants';
 import { LoginDto } from '../dtos';
 import { UserService } from 'src/modules/user/services';
 import { User } from 'src/modules/user/schemas';
@@ -48,7 +47,7 @@ export class AuthService {
             const payload = this.jwtService.verify(refreshToken, { secret: JWT_REFRESH_SECRET });
             return this.generateTokens({ email: payload.email });
         } catch (error) {
-            throw new UnauthorizedException(errors.INVALID_REFRESH_TOKEN);
+            throw new UnauthorizedException("Invalid refresh token");
         }
     }
 
