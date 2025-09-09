@@ -1,13 +1,14 @@
 import { JwtAccessAuthGuard } from '@/modules/auth/guards';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
-import { UpdateUserDto } from '../dtos';
-import { User } from '../schemas';
-import { UserService } from '../services';
 import { ApiVersionHeader } from '@/modules/common/decorators';
+import { Body, ClassSerializerInterceptor, Controller, Get, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+import { UpdateUserDto, UserResponseDTO } from '../dtos';
+import { UserService } from '../services';
 
 @ApiVersionHeader()
 @Controller({ path: 'user', version: '1' })
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
 
     constructor(private userService: UserService) { }
@@ -18,8 +19,10 @@ export class UserController {
         summary: 'Get all users',
         description: 'Endpoint to retrieve a list of all users in the system',
     })
-    async findAll(): Promise<User[]> {
-        return this.userService.findAll();
+    @UseInterceptors(ClassSerializerInterceptor)
+    async findAll(): Promise<UserResponseDTO[]> {
+        const users = await this.userService.findAll();
+        return plainToInstance(UserResponseDTO, users);
     }
 
 

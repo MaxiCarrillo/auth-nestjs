@@ -6,6 +6,7 @@ import { UserService } from '@/modules/user/services';
 import { setCookie } from '@/shared/utils';
 import { Body, ClassSerializerInterceptor, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
 import type { Request, Response } from 'express';
 import { LoginDto } from '../dtos';
 import { GoogleOAuthGuard, JwtAccessAuthGuard, JwtRefreshAuthGuard, LocalAuthGuard } from '../guards';
@@ -30,7 +31,7 @@ export class AuthController {
     ): Promise<UserResponseDTO> {
         const user = await this.userService.findUserByToken(accessToken);
         if (!user) throw new UnauthorizedException("Invalid token");
-        return new UserResponseDTO(user);
+        return plainToInstance(UserResponseDTO, user);
     }
 
     @Post('login')

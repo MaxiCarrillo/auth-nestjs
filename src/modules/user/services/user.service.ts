@@ -3,9 +3,8 @@ import { GoogleProfile, JwtPayload } from '@/modules/auth/interfaces';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
-import { CreateUserDto, UserResponseDTO } from '../dtos';
+import { CreateUserDto } from '../dtos';
 import { User } from '../schemas';
 
 @Injectable()
@@ -23,12 +22,9 @@ export class UserService {
         return await this.userModel.findOne({ email }).lean();
     }
 
-    async findUserByToken(accessToken: string): Promise<UserResponseDTO | null> {
+    async findUserByToken(accessToken: string): Promise<User | null> {
         const payload: JwtPayload = this.jwtService.verify(accessToken, { secret: JWT_ACCESS_SECRET });
-        const user = await this.userModel.findOne({ email: payload.email }).lean();
-        return user ? plainToInstance(UserResponseDTO, user, {
-            excludeExtraneousValues: true,
-        }) : null;
+        return await this.userModel.findOne({ email: payload.email }).lean();
     }
 
     async findByEmailWithPassword(email: string): Promise<User | null> {
