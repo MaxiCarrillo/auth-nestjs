@@ -12,8 +12,8 @@ import { LoginDto } from '../dtos';
 import { GoogleOAuthGuard, JwtAccessAuthGuard, JwtRefreshAuthGuard, LocalAuthGuard } from '../guards';
 import { AuthService } from '../services';
 
-@ApiVersionHeader()
-@Controller({ path: 'auth', version: '1' })
+@ApiVersionHeader('1')
+@Controller({ path: 'auth', version: ['1'] })
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
 
@@ -110,7 +110,6 @@ export class AuthController {
             message: 'Token refrescado correctamente',
         };
     }
-
 
     @Get('google')
     @ApiOperation({
