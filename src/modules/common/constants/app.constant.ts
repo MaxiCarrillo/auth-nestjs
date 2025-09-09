@@ -1,1 +1,1 @@
-export const API_VERSION = 'v1';
+export const ACCEPT_VERSION_HEADER = 'Accept-Version';

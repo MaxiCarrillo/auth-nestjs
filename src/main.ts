@@ -1,17 +1,17 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { AppModule } from './app.module';
 import { getSwaggerConfig, GOOGLE_SECRET, NODE_ENV, PORT } from './core/config';
-import { API_VERSION } from './modules/common/constants';
+import { ACCEPT_VERSION_HEADER } from './modules/common/constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // CONFIGURACIÓN
-  app.setGlobalPrefix(`api/${API_VERSION}`);
+  app.setGlobalPrefix('api');
 
   app.use(cookieParser());
 
@@ -21,6 +21,11 @@ async function bootstrap() {
       transform: true
     }),
   );
+
+  app.enableVersioning({
+    type: VersioningType.HEADER,
+    header: ACCEPT_VERSION_HEADER,
+  });
 
   // SESSION PARA AUTENTICACIÓN CON GOOGLE
   app.use(
@@ -37,7 +42,7 @@ async function bootstrap() {
   // SWAGGER
   const { swaggerConfig, swaggerSetupOptions } = getSwaggerConfig();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup(`/api/${API_VERSION}/docs`, app, document, swaggerSetupOptions);
+  SwaggerModule.setup(`/api/docs`, app, document, swaggerSetupOptions);
 
   await app.listen(PORT);
 }
