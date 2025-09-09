@@ -30,7 +30,6 @@ export class AuthController {
         @Cookies(ACCESS_TOKEN_COOKIE) accessToken: string,
     ): Promise<UserResponseDTO> {
         const user = await this.userService.findUserByToken(accessToken);
-        if (!user) throw new UnauthorizedException("Invalid token");
         return plainToInstance(UserResponseDTO, user);
     }
 

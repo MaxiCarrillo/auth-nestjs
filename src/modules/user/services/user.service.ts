@@ -1,6 +1,6 @@
 import { JWT_ACCESS_SECRET } from '@/core/config';
 import { GoogleProfile, JwtPayload } from '@/modules/auth/interfaces';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -18,17 +18,23 @@ export class UserService {
         return this.userModel.find().lean();
     }
 
-    async findByEmail(email: string): Promise<User | null> {
-        return await this.userModel.findOne({ email }).lean();
+    async findByEmail(email: string): Promise<User> {
+        const user = await this.userModel.findOne({ email }).lean();
+        if (!user) throw new UnauthorizedException('User not found');
+        return user;
     }
 
-    async findUserByToken(accessToken: string): Promise<User | null> {
+    async findUserByToken(accessToken: string): Promise<User> {
         const payload: JwtPayload = this.jwtService.verify(accessToken, { secret: JWT_ACCESS_SECRET });
-        return await this.userModel.findOne({ email: payload.email }).lean();
+        const user = await this.userModel.findOne({ email: payload.email }).lean();
+        if (!user) throw new UnauthorizedException('Invalid token');
+        return user;
     }
 
-    async findByEmailWithPassword(email: string): Promise<User | null> {
-        return this.userModel.findOne({ email }).lean();
+    async findByEmailWithPassword(email: string): Promise<User> {
+        const user = await this.userModel.findOne({ email }).lean();
+        if (!user) throw new UnauthorizedException('User not found');
+        return user;
     }
 
     async create(createUserDto: CreateUserDto): Promise<User> {
