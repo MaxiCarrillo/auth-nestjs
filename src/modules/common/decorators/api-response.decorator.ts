@@ -6,10 +6,12 @@ interface ApiResponseOptions {
     description?: string;
     type?: Type<any>;
     status?: number;
+    isArray?: boolean;
+    primitiveType?: 'string' | 'number' | 'boolean'; // Para tipos primitivos
 }
 
 export function ApiStandardResponse(options: ApiResponseOptions) {
-    const { summary, description, type, status = 200 } = options;
+    const { summary, description, type, status = 200, isArray, primitiveType = "string" } = options;
 
     const metadataSchema = {
         type: 'object',
@@ -20,6 +22,17 @@ export function ApiStandardResponse(options: ApiResponseOptions) {
         },
     };
 
+    let dataSchema: any = {};
+    if (type) {
+        dataSchema = isArray
+            ? { type: 'array', items: { $ref: getSchemaPath(type) } }
+            : { $ref: getSchemaPath(type) };
+    } else if (primitiveType) {
+        dataSchema = isArray
+            ? { type: 'array', items: { type: primitiveType } }
+            : { type: primitiveType };
+    }
+
     return applyDecorators(
         ApiOperation({ summary, description }),
         ApiResponse({
@@ -27,7 +40,7 @@ export function ApiStandardResponse(options: ApiResponseOptions) {
             schema: {
                 properties: {
                     _metadata: metadataSchema,
-                    data: type ? { $ref: getSchemaPath(type) } : {},
+                    data: dataSchema,
                 },
             },
         }),

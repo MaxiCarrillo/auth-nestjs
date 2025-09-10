@@ -1,7 +1,7 @@
 import { JwtAccessAuthGuard } from '@/modules/auth/guards';
 import { ApiVersionHeader } from '@/modules/common/decorators';
-import { Body, ClassSerializerInterceptor, Controller, Get, Post, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiStandardResponse } from '@/modules/common/decorators/api-response.decorator';
+import { Body, ClassSerializerInterceptor, Controller, Get, Put, UseGuards, UseInterceptors } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { UpdateUserDto, UserResponseDTO } from '../dtos';
 import { UserService } from '../services';
@@ -15,20 +15,22 @@ export class UserController {
 
     @Get()
     @UseGuards(JwtAccessAuthGuard)
-    @ApiOperation({
+    @UseInterceptors(ClassSerializerInterceptor)
+    @ApiStandardResponse({
         summary: 'Get all users',
         description: 'Endpoint to retrieve a list of all users in the system',
+        type: UserResponseDTO,
+        isArray: true,
     })
-    @UseInterceptors(ClassSerializerInterceptor)
     async findAll(): Promise<UserResponseDTO[]> {
         const users = await this.userService.findAll();
         return plainToInstance(UserResponseDTO, users);
     }
 
 
-    @Post('update')
+    @Put('update')
     @UseGuards(JwtAccessAuthGuard)
-    @ApiOperation({
+    @ApiStandardResponse({
         summary: 'Update an existing user',
         description: 'Endpoint to update an existing user in the system',
     })
