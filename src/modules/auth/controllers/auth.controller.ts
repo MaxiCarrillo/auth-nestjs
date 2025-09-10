@@ -1,6 +1,7 @@
 import { JWT_ACCESS_EXPIRY, JWT_REFRESH_EXPIRY } from '@/core/config';
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/modules/common/constants';
 import { ApiVersionHeader, Cookies } from '@/modules/common/decorators';
+import { ApiStandardResponse } from '@/modules/common/decorators/api-response.decorator';
 import { CreateUserDto, UserResponseDTO } from '@/modules/user/dtos';
 import { UserService } from '@/modules/user/services';
 import { setCookie } from '@/shared/utils';
@@ -24,8 +25,11 @@ export class AuthController {
 
     @Get('me')
     @UseGuards(JwtAccessAuthGuard)
-    @ApiOperation({ summary: 'Obtener información del usuario autenticado', description: 'Devuelve la información del usuario autenticado' })
-    @ApiResponse({ status: 200, type: UserResponseDTO })
+    @ApiStandardResponse({
+        summary: 'Get Authenticated User',
+        description: 'Gets the currently authenticated user based on the access token provided in the cookies.',
+        type: UserResponseDTO,
+    })
     async getAuthUser(
         @Cookies(ACCESS_TOKEN_COOKIE) accessToken: string,
     ): Promise<UserResponseDTO> {
@@ -35,9 +39,9 @@ export class AuthController {
 
     @Post('login')
     @UseGuards(LocalAuthGuard)
-    @ApiOperation({
-        summary: 'Iniciar sesión',
-        description: 'Permite a un usuario iniciar sesión en la aplicación'
+    @ApiStandardResponse({
+        summary: 'Login',
+        description: 'Allows a user to log in to the application with their credentials.',
     })
     async login(
         @Body() loginDto: LoginDto,
@@ -59,9 +63,9 @@ export class AuthController {
     }
 
     @Post('logout')
-    @ApiOperation({
-        summary: 'Cerrar sesión',
-        description: 'Permite a un usuario cerrar sesión en la aplicación'
+    @ApiStandardResponse({
+        summary: 'Logout',
+        description: 'Allows a user to log out of the application.',
     })
     async logout(
         @Cookies(ACCESS_TOKEN_COOKIE) accessToken: string,
@@ -77,9 +81,10 @@ export class AuthController {
     }
 
     @Post('register')
-    @ApiOperation({
-        summary: 'Registrar un nuevo usuario',
-        description: 'Permite a un nuevo usuario registrarse en la aplicación'
+    @ApiStandardResponse({
+        summary: 'Register',
+        description: 'Allows a user to register in the application.',
+        status: 201,
     })
     async register(@Body() createUserDto: CreateUserDto) {
         await this.userService.create(createUserDto);
@@ -90,9 +95,9 @@ export class AuthController {
 
     @Post('refresh')
     @UseGuards(JwtRefreshAuthGuard)
-    @ApiOperation({
-        summary: 'Refrescar token',
-        description: 'Permite a un usuario refrescar su token de acceso'
+    @ApiStandardResponse({
+        summary: 'Refresh Token',
+        description: 'Allows a user to refresh their access token.',
     })
     async refresh(
         @Req() request: Request,
@@ -120,11 +125,11 @@ export class AuthController {
     async googleAuth(@Req() request) { }
 
     @Get('google-redirect')
-    @ApiOperation({
-        summary: 'Redirección de Google',
-        description: 'Maneja la redirección de Google después de la autenticación'
-    })
     @UseGuards(GoogleOAuthGuard)
+    @ApiStandardResponse({
+        summary: 'Google OAuth Redirect',
+        description: 'Handles the Google OAuth redirect after authentication.',
+    })
     googleAuthRedirect(
         @Req() request,
         @Res({ passthrough: true }) response: Response

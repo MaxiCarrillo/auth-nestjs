@@ -20,12 +20,15 @@ export class UserResponseDTO {
     @Expose()
     name: string;
 
+    @ApiProperty()
     @Expose()
     createdAt: Date;
 
+    @ApiProperty()
     @Expose()
     updatedAt: Date;
 
+    @ApiProperty()
     @Expose()
     get isGoogleUser(): boolean {
         return !!this.googleId;

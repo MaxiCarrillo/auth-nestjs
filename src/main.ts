@@ -6,6 +6,7 @@ import session from 'express-session';
 import { AppModule } from './app.module';
 import { getSwaggerConfig, GOOGLE_SECRET, NODE_ENV, PORT } from './core/config';
 import { ACCEPT_VERSION_HEADER } from './modules/common/constants';
+import { UserResponseDTO } from './modules/user/dtos';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -41,7 +42,11 @@ async function bootstrap() {
 
   // SWAGGER
   const { swaggerConfig, swaggerSetupOptions } = getSwaggerConfig();
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  const document = SwaggerModule.createDocument(app, swaggerConfig, {
+    extraModels: [
+      UserResponseDTO
+    ]
+  });
   SwaggerModule.setup(`/api/docs`, app, document, swaggerSetupOptions);
 
   await app.listen(PORT);
