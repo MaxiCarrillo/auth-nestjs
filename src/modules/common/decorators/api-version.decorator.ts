@@ -6,7 +6,7 @@ export function ApiVersionHeader(defaultVersion: string = '1') {
     return applyDecorators(
         ApiHeader({
             name: ACCEPT_VERSION_HEADER,
-            description: 'API version',
+            description: 'Header to specify the API version',
             required: true,
             schema: { type: 'string', default: defaultVersion },
         }),
